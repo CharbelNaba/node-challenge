@@ -10,6 +10,7 @@ interface ConfigDefinition {
         host: string
         port: number
         database: string
+        user: string
     }
     debug: {
         stackSize: number
@@ -17,6 +18,9 @@ interface ConfigDefinition {
     shutdown: {
         appKill: number
         serverClose: number
+    }
+    auth: {
+        jwtSecret: string
     }
 }
 

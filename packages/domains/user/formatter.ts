@@ -8,7 +8,8 @@ export function capitalize(word) {
 }
 
 export function secureTrim(user: User): string {
-  return JSON.stringify(user, publicFields);
+  const trimmedUser =  JSON.stringify(user, publicFields);
+  return JSON.parse(trimmedUser)
 }
 
 export function format(rawUser): User {

@@ -20,12 +20,12 @@ describe('[Packages | User-domain | Formatter] capitalize', () => {
 
 describe('[Packages | User-domain | Formatter] secureTrim', () => {
   test('secureTrim should remove fields that are not defined in the list of public fields', () => {
-    return expect(secureTrim({
+    return expect(JSON.stringify(secureTrim({
       first_name: 'John',
       last_name: 'Smith',
       company_name: 'Pleo',
       ssn: 1,
-    })).toEqual(JSON.stringify({
+    }))).toEqual(JSON.stringify({
       first_name: 'John',
       last_name: 'Smith',
       company_name: 'Pleo',

@@ -6,6 +6,7 @@ module.exports = {
     host: '0.0.0.0',
     port: 5432,
     database: 'challenge',
+    user: 'postgres'
   },
   debug: {
     stackSize: 4,
@@ -22,4 +23,5 @@ module.exports = {
     appKill: 1000,
     serverClose: 100,
   },
+  auth: {}
 };
