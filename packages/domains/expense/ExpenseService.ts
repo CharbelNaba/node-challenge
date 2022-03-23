@@ -23,7 +23,16 @@ export default class ExpenseService{
 
     public static async findAllByUserID(field: string, id:string): Promise<Array<Expense>> {
         try {
-            const expenseData: Array<Expense> = await db.Expense.findAll({where: {field:id}});
+            const expenseData: Array<Expense> = await db.Expense.findAll({where: {[field]:id}});
+            return expenseData;
+        } catch (error) {
+            return null;
+        }        
+    }
+
+    public static async findAllByUserIDAndFilter(field: string, id:string, filterColumn:string,filterValue:string): Promise<Array<Expense>> {
+        try {
+            const expenseData: Array<Expense> = await db.Expense.findAll({where: {[field]:id,[filterColumn]:filterValue}});
             return expenseData;
         } catch (error) {
             return null;
@@ -35,6 +44,18 @@ export default class ExpenseService{
             const expenseData: Array<Expense> = await db.Expense.findAll({
                 where:{user_id:id},
                 order: [[column,direction]]
+            });
+            return expenseData;
+        } catch (error) {
+            return null;
+        }        
+    }
+
+    public static async findAllSortAndFilter(sortColumn:string, direction:string, id:string, filterColumn:string,filterValue:string): Promise<Array<Expense>> {
+        try {
+            const expenseData: Array<Expense> = await db.Expense.findAll({
+                where:{user_id:id,[filterColumn]:filterValue},
+                order: [[sortColumn,direction]]
             });
             return expenseData;
         } catch (error) {
