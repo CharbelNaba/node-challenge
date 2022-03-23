@@ -1,7 +1,7 @@
 import { format } from './formatter';
 import { readUser } from './data/db-user';
 import { to } from '@nc/utils/async';
-import { User } from './types';
+import  User  from './data_objects/User';
 import { BadRequest, InternalError, NotFound } from '@nc/utils/errors';
 
 export async function getUserDetails(userId): Promise<User> {

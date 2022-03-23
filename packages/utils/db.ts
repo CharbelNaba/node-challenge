@@ -1,15 +1,19 @@
-import { Client } from 'pg';
+import { ExpenseModel, ExpenseModelInit } from '@nc/domain-expense/ExpenseModel';
 import config from 'config';
+import { Sequelize } from 'sequelize';
+import { UserModel, UserModelInit } from '@nc/domain-user/UserModel';
 
-let db;
+export let sequelize;
+sequelize = new Sequelize(`postgres://${config.db.user}@${config.db.host}:${config.db.port}/${config.db.database}`);
 
-export function connect() {
-  db = new Client(config.db);
-  return db.connect();
+UserModelInit(sequelize);
+ExpenseModelInit(sequelize)
+
+const db = {
+  sequelize,
+  Sequelize,
+  User: UserModel,
+  Expense: ExpenseModel
 }
 
-export async function query(queryString: string, parameters?: any) {
-  if (!db) await connect();
-
-  return db.query(queryString, parameters);
-}
+export default db;

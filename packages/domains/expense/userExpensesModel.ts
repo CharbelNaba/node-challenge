@@ -1,15 +1,15 @@
 import { format } from './formatter';
-import { readUserExpenses } from './data/db-expenses';
+import { readUserExpenses } from './data/db-user-expenses';
 import { to } from '@nc/utils/async';
-import { Expense } from './types';
+import Expense from '@nc/domain-expense/data_objects/Expense';
 import { BadRequest, InternalError, NotFound } from '@nc/utils/errors';
 
-export async function getUserExpenses(userId): Promise<Expense> {
+export async function getUserExpenses(userId,columnName?,direction?): Promise<Expense> {
   if (!userId) {
     throw BadRequest('userId property is missing.');
   }
 
-  const [dbError, rawExpense] = await to(readUserExpenses(userId));
+  const [dbError, rawExpense] = columnName ? await to(readUserExpenses(userId,columnName,direction)) : await to(readUserExpenses(userId));
 
   if (dbError) {
     throw InternalError(`Error fetching data from the DB: ${dbError.message}`);

@@ -1,6 +1,7 @@
-import { query } from '@nc/utils/db';
+import User from '../data_objects/User';
+import UserService from '../UserService';
 
-export function readUser(userId) {
-  return query('SELECT * FROM users WHERE id = $1', [userId])
-    .then((response) => response.rows?.[0]);
+export async function readUser(userId) {
+  const result: User = await UserService.findById((userId));
+  return result
 }

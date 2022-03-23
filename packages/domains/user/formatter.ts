@@ -1,4 +1,4 @@
-import { User } from './types';
+import User from '@nc/domain-user/data_objects/User';
 
 const publicFields = ['first_name', 'last_name', 'company_name'];
 
