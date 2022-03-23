@@ -2,19 +2,19 @@ import { IOptions } from './../IOptions';
 import Expense from "../data_objects/Expense";
 import ExpenseService from "../ExpenseService";
 
-export async function readUserExpenses(userId,options:IOptions) {
+export async function readUserExpenses(userId,options:IOptions,userSpecific) {
   let result: Expense[]
   if (options?.sort && options?.filter){
-    result = await ExpenseService.findAllSortAndFilter(options.sortColumnName,options.direction,userId,options.filterColumnName,options.filterValue)
+    result = userSpecific ? await ExpenseService.findAllByUserIdSortAndFilter(userId,options):await ExpenseService.findAllSortAndFilter(options)
   }
   else if (options?.sort){
-    result = await ExpenseService.findAllAndSort(options.sortColumnName, options.direction, userId)
+    result = userSpecific ? await ExpenseService.findAllByUserIdAndSort(userId,options):await ExpenseService.findAllAndSort(options)
   }
   else if (options?.filter){
-      result = await ExpenseService.findAllByUserIDAndFilter("user_id",userId,options.filterColumnName,options.filterValue)
+      result = userSpecific ? await ExpenseService.findAllByUserIDAndFilter(userId,options) : await ExpenseService.findAllAndFilter(options)
   }
   else{
-    result = await ExpenseService.findAllByUserID("user_id",userId);
+    result = userSpecific ? await ExpenseService.findAllByUserID(userId,options) : await ExpenseService.findAll();
   }
   return result 
 }

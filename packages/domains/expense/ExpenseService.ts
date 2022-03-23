@@ -1,7 +1,14 @@
+import { IOptions } from './IOptions';
 import Expense from "./data_objects/Expense";
 import db from "@nc/utils/db";
 
 export default class ExpenseService{
+    private static getPagingData(data, page, limit){
+        const { count: totalItems, rows: tutorials } = data;
+        const currentPage = page ? +page : 0;
+        const totalPages = Math.ceil(totalItems / limit);
+        return { totalItems, tutorials, totalPages, currentPage };
+    }
 
     public static async delete(id: string): Promise<object> {
         try {
@@ -21,29 +28,38 @@ export default class ExpenseService{
         }        
     }
 
-    public static async findAllByUserID(field: string, id:string): Promise<Array<Expense>> {
+    public static async findAllByUserID(id:string, options:IOptions): Promise<Array<Expense>> {
         try {
-            const expenseData: Array<Expense> = await db.Expense.findAll({where: {[field]:id}});
+            const expenseData: Array<Expense> = await db.Expense.findAll({where: {user_id:id}});
             return expenseData;
         } catch (error) {
             return null;
         }        
     }
 
-    public static async findAllByUserIDAndFilter(field: string, id:string, filterColumn:string,filterValue:string): Promise<Array<Expense>> {
+    public static async findAllByUserIDAndFilter(id:string, options:IOptions): Promise<Array<Expense>> {
         try {
-            const expenseData: Array<Expense> = await db.Expense.findAll({where: {[field]:id,[filterColumn]:filterValue}});
+            const expenseData: Array<Expense> = await db.Expense.findAll({where: {user_id:id,[options.filterColumnName]:options.filterValue}});
             return expenseData;
         } catch (error) {
             return null;
         }        
     }
 
-    public static async findAllAndSort(column:string, direction:string, id:string): Promise<Array<Expense>> {
+    public static async findAllAndFilter(options:IOptions): Promise<Array<Expense>> {
+        try {
+            const expenseData: Array<Expense> = await db.Expense.findAll({where: {[options.filterColumnName]:options.filterValue}});
+            return expenseData;
+        } catch (error) {
+            return null;
+        }        
+    }
+
+    public static async findAllByUserIdAndSort(id:string ,options:IOptions): Promise<Array<Expense>> {
         try {
             const expenseData: Array<Expense> = await db.Expense.findAll({
                 where:{user_id:id},
-                order: [[column,direction]]
+                order: [[options.sortColumnName,options.direction]]
             });
             return expenseData;
         } catch (error) {
@@ -51,11 +67,34 @@ export default class ExpenseService{
         }        
     }
 
-    public static async findAllSortAndFilter(sortColumn:string, direction:string, id:string, filterColumn:string,filterValue:string): Promise<Array<Expense>> {
+    public static async findAllAndSort(options:IOptions): Promise<Array<Expense>> {
         try {
             const expenseData: Array<Expense> = await db.Expense.findAll({
-                where:{user_id:id,[filterColumn]:filterValue},
-                order: [[sortColumn,direction]]
+                order: [[options.sortColumnName,options.direction]]
+            });
+            return expenseData;
+        } catch (error) {
+            return null;
+        }        
+    }
+
+    public static async findAllByUserIdSortAndFilter(id:string, options:IOptions): Promise<Array<Expense>> {
+        try {
+            const expenseData: Array<Expense> = await db.Expense.findAll({
+                where:{user_id:id,[options.filterColumnName]:options.filterValue},
+                order: [[options.sortColumnName,options.direction]]
+            });
+            return expenseData;
+        } catch (error) {
+            return null;
+        }        
+    }
+
+    public static async findAllSortAndFilter(options:IOptions): Promise<Array<Expense>> {
+        try {
+            const expenseData: Array<Expense> = await db.Expense.findAll({
+                where:{[options.filterColumnName]:options.filterValue},
+                order: [[options.sortColumnName,options.direction]]
             });
             return expenseData;
         } catch (error) {

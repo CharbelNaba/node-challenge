@@ -5,4 +5,6 @@ export interface IOptions{
     filterColumnName?:string
     direction?:string;
     filterValue?:string;
+    limit: number;
+    offset:number
 }
