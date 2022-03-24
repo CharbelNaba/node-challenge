@@ -7,7 +7,7 @@ export function capitalize(word) {
   return str[0].toUpperCase() + str.slice(1);
 }
 
-export function secureTrim(user: User): string {
+export function secureTrim(user:User|User[]): string {
   const trimmedUser =  JSON.stringify(user, publicFields);
   return JSON.parse(trimmedUser)
 }
@@ -20,4 +20,18 @@ export function format(rawUser): User {
     company_name: rawUser.company_name,
     ssn: rawUser.ssn,
   };
+}
+
+export function formatAll(rawUser): User[] {
+  let users=[]
+  rawUser.forEach(u=>{
+    users.push({
+      id: u.id,
+      first_name: capitalize(u.first_name),
+      last_name: capitalize(u.last_name),
+      company_name: u.company_name,
+      ssn: u.ssn
+    })
+  })
+  return users
 }

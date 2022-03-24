@@ -4,10 +4,10 @@ import db from "@nc/utils/db";
 
 export default class ExpenseService{
     private static getPagingData(data, page, limit){
-        const { count: totalItems, rows: tutorials } = data;
+        const { count: totalItems, rows: expenses } = data;
         const currentPage = page ? +page : 0;
         const totalPages = Math.ceil(totalItems / limit);
-        return { totalItems, tutorials, totalPages, currentPage };
+        return { totalItems, expenses, totalPages, currentPage };
     }
 
     public static async delete(id: string): Promise<object> {
@@ -19,47 +19,74 @@ export default class ExpenseService{
         }        
     }
 
-    public static async findAll(): Promise<Array<Expense>> {
+    public static async findAll(options:IOptions) {
         try {
-            const expenseData: Array<Expense> = await db.Expense.findAll();
+            const limit = options.limit
+            const offset = options.offset
+            const page = options.page
+            const expenseData = await db.Expense.findAndCountAll({limit,offset}).then(data=>{
+                return this.getPagingData(data,page,limit)
+            });
             return expenseData;
         } catch (error) {
             return null;
         }        
     }
 
-    public static async findAllByUserID(id:string, options:IOptions): Promise<Array<Expense>> {
+    public static async findAllByUserID(id:string, options:IOptions) {
         try {
-            const expenseData: Array<Expense> = await db.Expense.findAll({where: {user_id:id}});
+            const limit = options.limit
+            const offset = options.offset
+            const page = options.page
+            const expenseData= await db.Expense.findAndCountAll({limit, offset, where: {user_id:id}}).then(data=>{
+                return this.getPagingData(data,page,limit)
+            });
             return expenseData;
         } catch (error) {
             return null;
         }        
     }
 
-    public static async findAllByUserIDAndFilter(id:string, options:IOptions): Promise<Array<Expense>> {
+    public static async findAllByUserIDAndFilter(id:string, options:IOptions) {
         try {
-            const expenseData: Array<Expense> = await db.Expense.findAll({where: {user_id:id,[options.filterColumnName]:options.filterValue}});
+            const limit = options.limit
+            const offset = options.offset
+            const page = options.page
+            const expenseData = await db.Expense.findAndCountAll({limit, offset, where: {user_id:id,[options.filterColumnName]:options.filterValue}}).then(data=>{
+                return this.getPagingData(data,page,limit)
+            });
             return expenseData;
         } catch (error) {
             return null;
         }        
     }
 
-    public static async findAllAndFilter(options:IOptions): Promise<Array<Expense>> {
+    public static async findAllAndFilter(options:IOptions) {
         try {
-            const expenseData: Array<Expense> = await db.Expense.findAll({where: {[options.filterColumnName]:options.filterValue}});
+            const limit = options.limit
+            const offset = options.offset
+            const page = options.page
+            const expenseData= await db.Expense.findAndCountAll({limit, offset, where: {[options.filterColumnName]:options.filterValue}}).then(data=>{
+                return this.getPagingData(data,page,limit)
+            });
             return expenseData;
         } catch (error) {
             return null;
         }        
     }
 
-    public static async findAllByUserIdAndSort(id:string ,options:IOptions): Promise<Array<Expense>> {
+    public static async findAllByUserIdAndSort(id:string ,options:IOptions) {
         try {
-            const expenseData: Array<Expense> = await db.Expense.findAll({
+            const limit = options.limit
+            const offset = options.offset
+            const page = options.page
+            const expenseData = await db.Expense.findAndCountAll({
+                limit,
+                offset,
                 where:{user_id:id},
                 order: [[options.sortColumnName,options.direction]]
+            }).then(data=>{
+                return this.getPagingData(data,page,limit)
             });
             return expenseData;
         } catch (error) {
@@ -67,10 +94,17 @@ export default class ExpenseService{
         }        
     }
 
-    public static async findAllAndSort(options:IOptions): Promise<Array<Expense>> {
+    public static async findAllAndSort(options:IOptions) {
         try {
-            const expenseData: Array<Expense> = await db.Expense.findAll({
+            const limit = options.limit
+            const offset = options.offset
+            const page = options.page
+            const expenseData = await db.Expense.findAndCountAll({
+                limit,
+                offset,
                 order: [[options.sortColumnName,options.direction]]
+            }).then(data=>{
+                return this.getPagingData(data,page,limit)
             });
             return expenseData;
         } catch (error) {
@@ -78,11 +112,18 @@ export default class ExpenseService{
         }        
     }
 
-    public static async findAllByUserIdSortAndFilter(id:string, options:IOptions): Promise<Array<Expense>> {
+    public static async findAllByUserIdSortAndFilter(id:string, options:IOptions) {
         try {
-            const expenseData: Array<Expense> = await db.Expense.findAll({
+            const limit = options.limit
+            const offset = options.offset
+            const page = options.page
+            const expenseData = await db.Expense.findAndCountAll({
+                limit,
+                offset,
                 where:{user_id:id,[options.filterColumnName]:options.filterValue},
                 order: [[options.sortColumnName,options.direction]]
+            }).then(data=>{
+                return this.getPagingData(data,page,limit)
             });
             return expenseData;
         } catch (error) {
@@ -90,11 +131,18 @@ export default class ExpenseService{
         }        
     }
 
-    public static async findAllSortAndFilter(options:IOptions): Promise<Array<Expense>> {
+    public static async findAllSortAndFilter(options:IOptions) {
         try {
-            const expenseData: Array<Expense> = await db.Expense.findAll({
+            const limit = options.limit
+            const offset = options.offset
+            const page = options.page
+            const expenseData = await db.Expense.findAndCountAll({
+                limit,
+                offset,
                 where:{[options.filterColumnName]:options.filterValue},
                 order: [[options.sortColumnName,options.direction]]
+            }).then(data=>{
+                return this.getPagingData(data,page,limit)
             });
             return expenseData;
         } catch (error) {

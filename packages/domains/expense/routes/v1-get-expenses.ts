@@ -13,11 +13,13 @@ const getPagination = (page, size) => {
 };
 
 function populateOptions(req):IOptions{
-  const { page, size } = req.query;
+  const { page, size, expenseId } = req.query;
   const { limit, offset } = getPagination(page, size);
   let options : IOptions = {
-    limit:limit,
-    offset: offset
+    limit: limit,
+    offset: offset,
+    page: page ?? 0,
+    expenseId:expenseId
   }
   const columns = ["id","merchant_name","amount_in_cents","currency","user_id","date_created","status"]
   const filterColumns:string[] = columns.map(col=> `filter_${col}`)
@@ -55,7 +57,7 @@ router.get('/get-user-expenses', async (req, res, next) => {
   let expenseError
   let userExpenseDetails
   
-  [expenseError, userExpenseDetails] = await to(getUserExpenses(req.query?.userId, options,true)); 
+  [expenseError, userExpenseDetails] = await to(getUserExpenses(req.query?.userId, options,true,false)); 
 
   if (expenseError) {
     return next(new ApiError(expenseError, expenseError.status, `Could not get user expenses: ${expenseError}`, expenseError.title, req));
@@ -72,7 +74,7 @@ router.get('/get-all-expenses', async (req, res, next) => {
   let expenseError
   let userExpenseDetails
   
-  [expenseError, userExpenseDetails] = await to(getUserExpenses(req.query?.userId, options,false)); 
+  [expenseError, userExpenseDetails] = await to(getUserExpenses(req.query?.userId, options,false,false)); 
 
   if (expenseError) {
     return next(new ApiError(expenseError, expenseError.status, `Could not get user expenses: ${expenseError}`, expenseError.title, req));
@@ -84,3 +86,19 @@ router.get('/get-all-expenses', async (req, res, next) => {
   return res.json(userExpenseDetails);
 });
 
+router.get('/get-expense-byID', async (req, res, next) => {
+  let options:IOptions = populateOptions(req)
+  let expenseError
+  let userExpenseDetails
+  
+  [expenseError, userExpenseDetails] = await to(getUserExpenses(req.query?.userId, options,false,true)); 
+
+  if (expenseError) {
+    return next(new ApiError(expenseError, expenseError.status, `Could not get user expenses: ${expenseError}`, expenseError.title, req));
+  }
+
+  if (!userExpenseDetails) {
+    return res.json({});
+  }
+  return res.json(userExpenseDetails);
+});

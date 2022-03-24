@@ -1,10 +1,12 @@
 export interface IOptions{
     sort?: boolean;
-    filter?:boolean;
-    sortColumnName?:string;
-    filterColumnName?:string
-    direction?:string;
-    filterValue?:string;
+    filter?: boolean;
+    expenseId?: string;
+    sortColumnName?: string;
+    filterColumnName?: string
+    direction?: string;
+    filterValue?: string;
     limit: number;
-    offset:number
+    offset: number;
+    page: number
 }
