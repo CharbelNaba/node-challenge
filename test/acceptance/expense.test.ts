@@ -61,6 +61,34 @@ describe('Expenses Acceptance Tests', () => {
         expect(response.status).toBe(200);
         expect(filtered).toBe(true);
       });
+      test('/expense/v1/get-all-expenses with filtering should return a valid response', async () => {
+        const response = await Api.get(
+          '/expense/v1/get-all-expenses?filter=true&filter_status=processed&sort=true&sort_amount_in_cents=ASC'
+        );
+        let sorted = true
+        let filtered = true;
+        const {expenses} = response.body
+        const expensesArr: Array<any> = [expenses][0]
+        console.log(expensesArr)
+
+        for (var i=0; i<expensesArr.length-1;++i){
+          if (expensesArr[i][`amount_in_cents`] > expensesArr[i+1][`amount_in_cents`]){
+              sorted=false;
+              break;
+          }
+          if (expensesArr[i]['status']==="pending"){
+              filtered = false
+              break
+          }
+        }
+        if (expensesArr[expensesArr.length-1]['status']==="pending"){
+          filtered=false
+        }
+
+        expect(response.status).toBe(200);
+        expect(filtered).toBe(true);
+        expect(sorted).toBe(true);
+      });
   });
 
   describe('get-user-expenses endpoint', () => {

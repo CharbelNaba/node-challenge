@@ -4,13 +4,13 @@ import ExpenseService from "../ExpenseService";
 export async function readUserExpenses(userId,options:IOptions,userSpecific,idSpecific) {
   let result
   if (options?.sort && options?.filter){
-    result = userSpecific ? await ExpenseService.findAllByUserIdSortAndFilter(userId,options):await ExpenseService.findAllSortAndFilter(options)
+    result = readUserSortedAndFiltered(userSpecific, userId, options)
   }
   else if (options?.sort){
-    result = userSpecific ? await ExpenseService.findAllByUserIdAndSort(userId,options):await ExpenseService.findAllAndSort(options)
+    result = readUserSorted(userSpecific, userId, options)
   }
   else if (options?.filter){
-      result = userSpecific ? await ExpenseService.findAllByUserIDAndFilter(userId,options) : await ExpenseService.findAllAndFilter(options)
+    result = readUserFiltered(userSpecific, userId, options)
   }
   else{
     if (idSpecific){
@@ -21,4 +21,17 @@ export async function readUserExpenses(userId,options:IOptions,userSpecific,idSp
     }
   }
   return result 
+}
+
+async function readUserSortedAndFiltered(userSpecific, userId, options){
+  const res= userSpecific ? await ExpenseService.findAllByUserIdSortAndFilter(userId,options):await ExpenseService.findAllSortAndFilter(options)
+  return res
+}
+async function readUserSorted(userSpecific, userId, options){
+  const res= userSpecific ? await ExpenseService.findAllByUserIdAndSort(userId,options):await ExpenseService.findAllAndSort(options)
+  return res
+}
+async function readUserFiltered(userSpecific, userId, options){
+  const res= userSpecific ? await ExpenseService.findAllByUserIDAndFilter(userId,options) : await ExpenseService.findAllAndFilter(options)
+  return res
 }

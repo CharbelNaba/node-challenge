@@ -71,3 +71,4 @@ In case you prefer to test directly from the browser, here are some endpoints to
     4)expense/v1/get-user-expenses?userId=da140a29-ae80-4f0e-a62d-6c2d2bc8a474&status=ASC
     5)expense/v1/get-expense-byID?expenseId=f3f34c29-274a-414d-988f-711802eeac25
     6)expense/v1/get-user-expenses?userId=da140a29-ae80-4f0e-a62d-6c2d2bc8a474&sort=true&sort_amount_in_cents=ASC&filter=true&filter_status=processed
+    7)expense/v1/get-all-expenses?page=0&size=1
