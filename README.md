@@ -56,3 +56,18 @@ The command above will run the following test suites sequentially:
 
 
 Happy hacking 😁!
+
+## Proposed Solution
+
+To tackle the problem I took an iterative approach for the implementation. As you may see, in the first commit, I implemented the expenses domain almost exactly like the user one. Then on the next iteration, I introduced the notion of ORM to manipulate the data, since not only it would allow the implementation of the sorting, filtering and pagination features but it would also turn the codebase more robust, easier to handle and more efficient with less hands-on management. Once the ORM was implemented, the rest was just a question of using the right function calls to provide the requested features. Not to mention, that in each iteration I was fully testing the API, and doing some small bug fixes when required. After completing, the tasks mentioned above, I decided to add some new routes that would be beneficial for later uses (getting all users, getting all expenses, getting an expense by the expense ID). Last but not least, came the tests to confirm that everything I implemented were in fact functionning as wished. Finally, the work that was done in this repo is not but the tip of the iceberg for such an API, since there are still a lot that can be done (however, I did not want to exceed the 6 hours that were mentioned in the first interview) such as continuing CRUD operations for both domain,providing various functions for the two models in order to process and manipulate the data, implement more tests, change the whole structure of the code base so that it has more clean architecture and so on.
+
+Looking forward to hearing your feedback!
+
+In case you prefer to test directly from the browser, here are some endpoints to make things easier:
+    1)user/v1/get-user-details?userId=e17825a6-ad80-41bb-a76b-c5ee17b2f29d
+    2)user/v1/get-all-users
+
+    3)expense/v1/get-all-expenses?page=1&sort=true&sort_amount_in_cents=DESC
+    4)expense/v1/get-user-expenses?userId=da140a29-ae80-4f0e-a62d-6c2d2bc8a474&status=ASC
+    5)expense/v1/get-expense-byID?expenseId=f3f34c29-274a-414d-988f-711802eeac25
+    6)expense/v1/get-user-expenses?userId=da140a29-ae80-4f0e-a62d-6c2d2bc8a474&sort=true&sort_amount_in_cents=ASC&filter=true&filter_status=processed

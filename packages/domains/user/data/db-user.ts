@@ -8,7 +8,6 @@ export async function readUser(userId,idSpecific) {
   }
   else{
     const result: User[] = await UserService.findAll();
-    console.log(`result is ${JSON.stringify(result)}`)
     return result
   }
 }
